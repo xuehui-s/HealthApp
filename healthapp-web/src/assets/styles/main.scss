@@ -1,0 +1,163 @@
+/* ==================== 全局变量 ==================== */
+:root {
+  --primary-color: #409eff;
+  --primary-dark: #2b7fd4;
+  --success-color: #67c23a;
+  --warning-color: #e6a23c;
+  --danger-color: #f56c6c;
+  --info-color: #909399;
+  --bg-color: #f5f7fa;
+  --card-bg: #ffffff;
+  --text-primary: #303133;
+  --text-regular: #606266;
+  --text-secondary: #909399;
+  --border-color: #dcdfe6;
+  --shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.08);
+  --shadow-hover: 0 4px 20px 0 rgba(0, 0, 0, 0.12);
+  --radius: 8px;
+  --sidebar-width: 220px;
+  --header-height: 60px;
+}
+
+/* ==================== 全局重置 ==================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #app {
+  height: 100%;
+  width: 100%;
+  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+  font-size: 14px;
+  color: var(--text-primary);
+  background: var(--bg-color);
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ==================== 滚动条 ==================== */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background: #c0c4cc;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ==================== 通用卡片 ==================== */
+.card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+  transition: box-shadow 0.3s;
+}
+.card:hover {
+  box-shadow: var(--shadow-hover);
+}
+
+/* ==================== 页面容器 ==================== */
+.page-container {
+  padding: 20px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.page-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* ==================== 统计卡片 ==================== */
+.stat-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: var(--radius);
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.stat-card.green {
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+}
+.stat-card.orange {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+.stat-card.blue {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+.stat-card .stat-value {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 8px 0;
+}
+.stat-card .stat-label {
+  font-size: 14px;
+  opacity: 0.9;
+}
+.stat-card .stat-icon {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 48px;
+  opacity: 0.2;
+}
+
+/* ==================== 渐变按钮 ==================== */
+.btn-gradient {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  color: white;
+  padding: 10px 24px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s;
+}
+.btn-gradient:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+/* ==================== 标签 ==================== */
+.tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+.tag-success { background: #f0f9eb; color: #67c23a; }
+.tag-warning { background: #fdf6ec; color: #e6a23c; }
+.tag-danger { background: #fef0f0; color: #f56c6c; }
+.tag-info { background: #f4f4f5; color: #909399; }
+.tag-primary { background: #ecf5ff; color: #409eff; }
+
+/* ==================== 空状态 ==================== */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-secondary);
+}
+.empty-state .empty-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+  opacity: 0.3;
+}

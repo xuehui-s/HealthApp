@@ -1,11 +1,13 @@
 package Service.Impl;
 import Service.PatientLoginService;
 import Dto.Result;
+import Exception.BusinessException;
 import Mapper.PatientMapper;
 import PoJo.Patient;
-import Util.JwtUtil;
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import constant.BusinessCode;
+import it.guowei.healthapp.common.util.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -20,6 +22,8 @@ public class PatientLoginServiceImpl implements PatientLoginService {
     private StringRedisTemplate redisTemplate;
     @Autowired
     private PatientMapper patientMapper;
+    @Autowired
+    private JwtUtil jwtUtil;
     // 登录
     @Override
     public Result login(Patient patient) {
@@ -71,15 +75,21 @@ public class PatientLoginServiceImpl implements PatientLoginService {
 
         // ==========================================
         // 4. 登录成功，生成JWT并存入Redis
+        //    （企业版Token携带 userId/userType 声明，网关据此填充用户上下文）
         // ==========================================
-        String token = JwtUtil.generateToken(username);
-        
+        String token = jwtUtil.generateToken(Long.valueOf(dbPatient.getId()), dbPatient.getUsername(), 1);
+
         // 将 Token 存入 Redis，设置30分钟滑动过期
         String jwtRedisKey = "JWT_TOKEN_" + username;
         redisTemplate.opsForValue().set(jwtRedisKey, token, 30, TimeUnit.MINUTES);
         log.info("登录成功，Token已存入Redis，用户: {}", username);
-        
-        return Result.ok(token);
+
+        // 返回 token 和用户信息（前端需要 patientId 调用缴费/消息接口）
+        java.util.Map<String, Object> data = new java.util.HashMap<>();
+        data.put("token", token);
+        data.put("patientId", dbPatient.getId());
+        data.put("username", dbPatient.getUsername());
+        return Result.ok(data);
     }
 
 //获取验证码
@@ -125,7 +135,7 @@ public class PatientLoginServiceImpl implements PatientLoginService {
             Patient existPatient = patientMapper.selectOne(queryWrapper);
 
             if (existPatient != null) {
-                throw new RuntimeException("该手机号已注册");
+                throw new BusinessException(BusinessCode.PHONE_REGISTERED);
             }
 
             // 3. 密码加密（BCrypt）

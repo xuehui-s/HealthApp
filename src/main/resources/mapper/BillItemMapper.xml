@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Mapper.BillItemMapper">
+
+    <!-- 批量插入费用明细 -->
+    <insert id="insertBatch" parameterType="java.util.List">
+        INSERT INTO bill_item (order_no, category, item_name, specification,
+                               unit_price, quantity, subtotal, remark, create_time)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.orderNo}, #{item.category}, #{item.itemName}, #{item.specification},
+             #{item.unitPrice}, #{item.quantity}, #{item.subtotal}, #{item.remark}, NOW())
+        </foreach>
+    </insert>
+
+    <!-- 根据订单号查询费用明细 -->
+    <select id="selectByOrderNo" resultType="PoJo.BillItem">
+        SELECT * FROM bill_item WHERE order_no = #{orderNo}
+        ORDER BY id ASC
+    </select>
+
+</mapper>

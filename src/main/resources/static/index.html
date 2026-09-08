@@ -1,214 +1,302 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>医疗预约系统</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>智慧医疗综合服务平台</title>
+<link rel="stylesheet" href="css/portal.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2317649F'><rect width='24' height='24' rx='6'/><path d='M10.5 5h3v5.5H19v3h-5.5V19h-3v-5.5H5v-3h5.5z' fill='white'/></svg>">
 </head>
 <body>
-<!-- 1. 角色选择页 -->
-<div id="roleSelectPage" class="page">
-    <div class="container">
-        <h1>🏥 医疗预约系统</h1>
-        <p class="subtitle">请选择您的角色</p>
-        <div class="role-buttons">
-            <button class="role-btn patient" onclick="goToLogin('patient')">👤 患者</button>
-            <button class="role-btn doctor" onclick="goToLogin('doctor')">👨‍⚕️ 医生</button>
-        </div>
+
+<!-- SVG 图标库（内联，无外部依赖） -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <symbol id="i-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></symbol>
+  <symbol id="i-wallet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="14" rx="2"/><path d="M3 10h18M16 15h2"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M18 9a6 6 0 1 0-12 0c0 5-2 6-2 6h16s-2-1-2-6"/><path d="M10 19a2 2 0 0 0 4 0"/></symbol>
+  <symbol id="i-robot" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="16" height="11" rx="2.5"/><path d="M12 8V4M9 4h6M8.5 13h.01M15.5 13h.01M9.5 16.5h5"/></symbol>
+  <symbol id="i-stethoscope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v6a4 4 0 0 0 8 0V3"/><path d="M9 13v3a5 5 0 0 0 10 0v-3"/><circle cx="19" cy="10" r="2"/></symbol>
+  <symbol id="i-receipt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h14v18l-2.3-1.5L14.4 21l-2.4-1.5L9.6 21l-2.3-1.5L5 21z"/><path d="M9 8h6M9 12h6"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></symbol>
+  <symbol id="i-plane" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10.5 3.5 4l1.8 5.6L3.5 12l1.8 2.4L3.5 20 21 13.5a1.5 1.5 0 0 0 0-3z"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4.5 6v5.2c0 4.6 3.2 7.9 7.5 9.8 4.3-1.9 7.5-5.2 7.5-9.8V6z"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></symbol>
+  <symbol id="i-tool" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4.5 4.5 0 0 0-6 5.6L3 17.6V21h3.4l5.7-5.7a4.5 4.5 0 0 0 5.6-6L14.5 12l-2.5-2.5z"/></symbol>
+  <symbol id="i-empty" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M4 7h16M4 7v13h16V7M9 7V4h6v3M10 12h4"/></symbol>
+  <symbol id="i-logout" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3M16 17l5-5-5-5M21 12H9"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></symbol>
+</svg>
+
+<!-- ==================== 登录 ==================== -->
+<div id="view-login">
+  <aside class="auth-side">
+    <div class="brand"><span class="brand-mark"><svg class="icon"><use href="#i-logo"/></svg></span>智慧医疗综合服务平台</div>
+    <div>
+      <h1>让就医更简单<br>让诊疗更高效</h1>
+      <ul>
+        <li><svg class="icon"><use href="#i-calendar"/></svg>在线预约挂号，实时号源查询，到院扫码签到</li>
+        <li><svg class="icon"><use href="#i-receipt"/></svg>诊疗费用明细清晰，支持多种支付方式与线上退款</li>
+        <li><svg class="icon"><use href="#i-robot"/></svg>AI 智能助手在线答疑，检索权威诊疗指南</li>
+        <li><svg class="icon"><use href="#i-shield"/></svg>全流程数据加密与权限管控，保障就医隐私</li>
+      </ul>
     </div>
-</div>
-
-<!-- 2. 登录页 -->
-<div id="loginPage" class="page" style="display: none;">
-    <div class="container">
-        <h2 id="loginTitle">患者登录</h2>
-        <form id="loginForm" onsubmit="handleLogin(event)">
-            <div class="form-group">
-                <label>手机号/工号</label>
-                <input type="text" id="loginUsername" placeholder="请输入手机号/工号" required>
-            </div>
-            <div class="form-group">
-                <label>密码</label>
-                <input type="password" id="loginPassword" placeholder="请输入密码" required>
-            </div>
-            <div class="form-group">
-                <label>验证码</label>
-                <div class="code-input">
-                    <input type="text" id="loginCode" placeholder="请输入验证码" required>
-                    <button type="button" class="code-btn" onclick="sendCode()">获取验证码</button>
-                </div>
-            </div>
-            <button type="submit" class="submit-btn">登录</button>
-        </form>
-        <div class="link-group">
-            <button class="link-btn" onclick="goToRegister()">没有账号？去注册</button>
-            <button class="back-btn" onclick="goToRoleSelect()">← 返回角色选择</button>
+    <footer>© 2026 智慧医疗综合服务平台 · 企业级演示环境</footer>
+  </aside>
+  <main class="auth-main">
+    <div class="auth-box">
+      <div class="role-tabs">
+        <button id="rt-patient" class="on" onclick="switchRole('patient')">患者登录</button>
+        <button id="rt-doctor" onclick="switchRole('doctor')">医生登录</button>
+      </div>
+      <h2 id="loginHello">您好，欢迎回来</h2>
+      <p class="sub" id="loginSub">请使用预留手机号登录预约系统</p>
+      <form onsubmit="doLogin(event)">
+        <div class="field"><label id="accountLabel">手机号</label>
+          <input class="input" id="loginAccount" placeholder="请输入手机号" autocomplete="username" required>
         </div>
+        <div class="field"><label>密码</label>
+          <input class="input" type="password" id="loginPassword" placeholder="请输入密码" autocomplete="current-password" required>
+        </div>
+        <div class="field"><label>短信验证码</label>
+          <div class="code-row">
+            <input class="input" id="loginCode" placeholder="6 位验证码" maxlength="6" required>
+            <button type="button" class="btn ghost" id="btnSendCode" onclick="sendCode()">获取验证码</button>
+          </div>
+        </div>
+        <button class="btn block" type="submit" id="btnLogin">登 录</button>
+      </form>
+      <div class="auth-foot">
+        <span>还没有账号？<a href="javascript:void(0)" onclick="showRegister()">患者注册</a></span>
+      </div>
+      <div class="demo-hint">演示环境：验证码将输出在后端服务控制台日志中</div>
     </div>
+  </main>
 </div>
 
-<!-- 3. 注册页 -->
-<div id="registerPage" class="page" style="display: none;">
-    <div class="container">
-        <h2 id="registerTitle">患者注册</h2>
-        <form id="registerForm" onsubmit="handleRegister(event)">
-            <div class="form-group">
-                <label>手机号</label>
-                <input type="tel" id="regPhone" placeholder="请输入手机号" required>
-            </div>
-            <div class="form-group">
-                <label>设置密码</label>
-                <input type="password" id="regPassword" placeholder="请设置密码（不少于6位）" required minlength="6">
-            </div>
-            <button type="submit" class="submit-btn">注册</button>
-        </form>
-        <div class="link-group">
-            <button class="link-btn" onclick="goToLoginFromRegister()">已有账号？去登录</button>
-            <button class="back-btn" onclick="goToLoginFromRegister()">← 返回登录</button>
+<!-- ==================== 注册 ==================== -->
+<div id="view-register" style="display:none">
+  <main class="auth-main">
+    <div class="auth-box">
+      <h2>注册患者账号</h2>
+      <p class="sub">注册后即可在线预约挂号与查询缴费记录</p>
+      <form onsubmit="doRegister(event)">
+        <div class="field"><label>手机号</label>
+          <input class="input" id="regPhone" placeholder="11 位手机号" maxlength="11" required>
         </div>
+        <div class="field"><label>密码（至少 6 位）</label>
+          <input class="input" type="password" id="regPwd" minlength="6" placeholder="设置登录密码" required>
+        </div>
+        <div class="field"><label>确认密码</label>
+          <input class="input" type="password" id="regPwd2" minlength="6" placeholder="再次输入密码" required>
+        </div>
+        <button class="btn block" type="submit">注 册</button>
+      </form>
+      <div class="auth-foot"><a href="javascript:void(0)" onclick="backToLogin()">返回登录</a></div>
     </div>
+  </main>
 </div>
 
-<!-- 4. 主页面（登录成功后进入） -->
-<div id="mainPage" class="page" style="display: none;">
-    <header class="header">
-        <div class="logo">🏥 医疗预约系统</div>
-        <div class="user-info">
-            <span id="userName">用户</span>
-            <button class="logout-btn" onclick="logout()">退出登录</button>
-        </div>
-    </header>
-    <nav class="nav">
-        <button class="nav-btn active" onclick="switchModule('appointment')">预约挂号</button>
-        <button class="nav-btn" onclick="switchModule('payment')">缴费管理</button>
-        <button class="nav-btn" onclick="switchModule('message')">消息通知</button>
-        <button class="nav-btn doctor-only" onclick="switchModule('doctorManage')">医生管理</button>
-    </nav>
-    <main class="main-content">
-        <!-- 预约模块 -->
-        <div id="appointmentModule" class="module active">
-            <h2>预约挂号</h2>
-            <div class="form">
-                <div class="form-group">
-                    <label>选择科室</label>
-                    <select id="deptSelect" onchange="loadDoctors()">
-                        <option value="">请选择科室</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>选择医生</label>
-                    <select id="doctorSelect" onchange="loadPeriods()">
-                        <option value="">请选择医生</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>预约日期</label>
-                    <input type="date" id="appointDate" onchange="loadPeriods()">
-                </div>
-                <div class="form-group">
-                    <label>预约时段</label>
-                    <div id="periodOptions" class="period-grid"></div>
-                </div>
-                <button class="submit-btn" onclick="submitAppointment()">提交预约</button>
-            </div>
-            <h3>我的预约</h3>
-            <div id="myAppointments" class="list-container"></div>
-        </div>
+<!-- ==================== 主应用 ==================== -->
+<div id="view-app">
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark"><svg class="icon"><use href="#i-logo"/></svg></span>智慧医疗</div>
+    <nav class="nav" id="mainNav"></nav>
+    <div class="user-chip">
+      <div class="avatar" id="userAvatar">患</div>
+      <div class="who"><b id="whoName">-</b><span id="whoRole">-</span></div>
+      <button class="btn-logout" title="退出登录" onclick="doLogout()"><svg class="icon"><use href="#i-logout"/></svg></button>
+    </div>
+  </header>
 
-        <!-- 缴费模块 -->
-        <div id="paymentModule" class="module">
-            <h2>缴费管理</h2>
-            <div id="patientPayment">
-                <h3>待缴费订单</h3>
-                <div id="waitPayList" class="list-container"></div>
-                <h3>缴费记录</h3>
-                <div id="payHistoryList" class="list-container"></div>
+  <div class="main">
+    <!-- ========== 预约挂号（患者） ========== -->
+    <section class="page" id="page-book">
+      <div class="page-title"><svg class="icon"><use href="#i-calendar"/></svg>预约挂号</div>
+      <div class="book-flow">
+        <div>
+          <div class="card"><div class="card-head"><h3>挂号单</h3></div><div class="card-body">
+            <div class="summary">
+              <div class="kv"><span>科室</span><b id="sumDept">-</b></div>
+              <div class="kv"><span>医生</span><b id="sumDoctor">-</b></div>
+              <div class="kv"><span>日期</span><b id="sumDate">-</b></div>
+              <div class="kv" style="border:none"><span>时段</span><b id="sumPeriod">-</b></div>
             </div>
-            <div id="doctorPayment" style="display: none;">
-                <div class="form">
-                    <h3>开立缴费单</h3>
-                    <div class="form-group">
-                        <label>预约ID</label>
-                        <input type="text" id="billAppointmentId" placeholder="请输入预约ID">
-                    </div>
-                    <div class="form-group">
-                        <label>费用项目</label>
-                        <input type="text" id="billItems" placeholder="如：挂号费、诊疗费">
-                    </div>
-                    <div class="form-group">
-                        <label>总金额</label>
-                        <input type="number" id="billAmount" placeholder="请输入金额">
-                    </div>
-                    <button class="submit-btn" onclick="createBill()">开立缴费单</button>
-                </div>
-            </div>
+            <button class="btn block" style="margin-top:16px" id="btnSubmitBook" onclick="submitAppointment()">确认挂号</button>
+            <p style="font-size:12px;color:var(--text-muted);margin-top:10px">上午号源截止当日 12:00，下午号源截止当日 18:00；每位患者每日限约 1 个号源。</p>
+          </div></div>
         </div>
+        <div>
+          <div class="card" style="margin-bottom:16px"><div class="card-body">
+            <p class="step-label"><span class="num">1</span>选择科室</p>
+            <div class="dept-grid" id="deptGrid"><div class="empty">加载中...</div></div>
+          </div></div>
+          <div class="card" style="margin-bottom:16px"><div class="card-body">
+            <p class="step-label"><span class="num">2</span>选择日期 <small style="font-weight:400">（近 7 天号源）</small></p>
+            <div class="day-strip" id="dayStrip"><div class="empty">请先选择科室</div></div>
+            <p class="step-label" style="margin-top:18px"><span class="num">3</span>选择时段</p>
+            <div class="period-row" id="periodRow">
+              <button class="period-item" data-period="上午" onclick="pickPeriod('上午')"><b>上午</b><span id="rem-am">选择日期后查看余量</span></button>
+              <button class="period-item" data-period="下午" onclick="pickPeriod('下午')"><b>下午</b><span id="rem-pm">选择日期后查看余量</span></button>
+            </div>
+          </div></div>
+          <div class="card"><div class="card-body">
+            <p class="step-label"><span class="num">4</span>选择医生</p>
+            <div class="doctor-grid" id="doctorGrid"><div class="empty">请先选择日期与时段</div></div>
+          </div></div>
+        </div>
+      </div>
+    </section>
 
-        <!-- 消息模块 -->
-        <div id="messageModule" class="module">
-            <h2>消息通知</h2>
-            <div class="tab-group">
-                <button class="tab-btn active" onclick="loadMessages('all')">全部消息</button>
-                <button class="tab-btn" onclick="loadMessages('unread')">未读消息</button>
-            </div>
-            <div id="messageList" class="list-container"></div>
-        </div>
+    <!-- ========== 我的预约 ========== -->
+    <section class="page" id="page-my-appt">
+      <div class="page-title"><svg class="icon"><use href="#i-list"/></svg>我的预约</div>
+      <div class="card"><div class="table-wrap">
+        <table class="tbl"><thead><tr id="myApptHead"></tr></thead><tbody id="myApptBody"></tbody></table>
+      </div></div>
+    </section>
 
-        <!-- 医生管理模块 -->
-        <div id="doctorManageModule" class="module">
-            <h2>医生管理</h2>
-            <div class="tab-group">
-                <button class="tab-btn active" onclick="switchDoctorTab('leave')">请假管理</button>
-                <button class="tab-btn" onclick="switchDoctorTab('bill')">开缴费单</button>
+    <!-- ========== 缴费中心（患者） ========== -->
+    <section class="page" id="page-pay">
+      <div class="page-title"><svg class="icon"><use href="#i-wallet"/></svg>缴费中心</div>
+      <div class="subtabs">
+        <button class="on" data-tab="waitpay" onclick="switchPayTab('waitpay')">待缴费</button>
+        <button data-tab="records" onclick="switchPayTab('records')">缴费记录</button>
+        <button data-tab="refunds" onclick="switchPayTab('refunds')">退款记录</button>
+      </div>
+      <div class="card"><div class="table-wrap" id="payPanel"></div></div>
+    </section>
+
+    <!-- ========== 门诊工作台（医生） ========== -->
+    <section class="page" id="page-work">
+      <div class="page-title"><svg class="icon"><use href="#i-stethoscope"/></svg>门诊工作台</div>
+      <div class="card"><div class="table-wrap">
+        <table class="tbl"><thead><tr>
+          <th>预约号</th><th>患者</th><th>就诊日期</th><th>时段</th><th>排队号</th><th>状态</th>
+        </tr></thead><tbody id="workBody"></tbody></table>
+      </div></div>
+    </section>
+
+    <!-- ========== 收费开单（医生） ========== -->
+    <section class="page" id="page-billing">
+      <div class="page-title"><svg class="icon"><use href="#i-receipt"/></svg>收费开单</div>
+      <div class="book-flow">
+        <div>
+          <div class="card" style="margin-bottom:16px"><div class="card-head"><h3>患者待缴费</h3></div><div class="card-body">
+            <div class="field"><label>患者 ID</label>
+              <div class="form-row">
+                <input class="input" id="qPatientId" type="number" placeholder="输入患者ID">
+                <button class="btn ghost" style="flex:none" onclick="loadWaitPay()">查询</button>
+              </div>
             </div>
-            <div id="leaveTab" class="doctor-tab active">
-                <div class="form">
-                    <h3>申请请假</h3>
-                    <div class="form-group">
-                        <label>请假类型</label>
-                        <select id="leaveType">
-                            <option value="normal">常规请假</option>
-                            <option value="emergency">紧急请假</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>开始日期</label>
-                        <input type="date" id="leaveStart">
-                    </div>
-                    <div class="form-group">
-                        <label>结束日期</label>
-                        <input type="date" id="leaveEnd">
-                    </div>
-                    <button class="submit-btn" onclick="applyLeave()">提交申请</button>
-                </div>
-                <h3>请假记录</h3>
-                <div id="leaveList" class="list-container"></div>
-            </div>
-            <div id="billTab" class="doctor-tab">
-                <div class="form">
-                    <h3>开立缴费单</h3>
-                    <div class="form-group">
-                        <label>预约ID</label>
-                        <input type="text" id="docBillAppId" placeholder="请输入预约ID">
-                    </div>
-                    <div class="form-group">
-                        <label>费用项目</label>
-                        <input type="text" id="docBillItems" placeholder="请输入费用项目">
-                    </div>
-                    <div class="form-group">
-                        <label>总金额</label>
-                        <input type="number" id="docBillAmount" placeholder="请输入金额">
-                    </div>
-                    <button class="submit-btn" onclick="docCreateBill()">开立缴费单</button>
-                </div>
-            </div>
+            <div id="waitPayBox" style="margin-top:6px"><div class="empty"><svg class="icon"><use href="#i-empty"/></svg><br>查询患者待缴费单</div></div>
+          </div></div>
         </div>
-    </main>
+        <div>
+          <div class="card"><div class="card-head"><h3>开立缴费单</h3></div><div class="card-body">
+            <div class="form-row" style="margin-bottom:14px">
+              <div class="field" style="flex:1;margin:0"><label>关联预约 ID</label><input class="input" id="billApptId" type="number" placeholder="患者已签到（状态1）的预约ID"></div>
+              <div class="field" style="flex:1;margin:0"><label>备注</label><input class="input" id="billRemark" placeholder="选填"></div>
+            </div>
+            <label style="font-size:13px;font-weight:500;color:var(--text-muted);display:block;margin-bottom:6px">费用明细</label>
+            <div class="bill-items" id="billItems">
+              <div class="bill-row head"><span>类别</span><span>项目名称</span><span>单价(元)</span><span>数量</span><span>小计</span><span></span></div>
+            </div>
+            <button class="btn sm ghost" style="margin-top:10px" onclick="addBillRow()">+ 添加明细</button>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px">
+              <span style="color:var(--text-muted)">合计金额</span>
+              <span style="font-size:22px;font-weight:600;color:var(--primary)">¥ <span id="billTotal">0.00</span></span>
+            </div>
+            <button class="btn block" style="margin-top:14px" onclick="createPayOrder()">提交缴费单</button>
+          </div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 日结与营收（医生/收费员） ========== -->
+    <section class="page" id="page-settle">
+      <div class="page-title"><svg class="icon"><use href="#i-chart"/></svg>日结与营收</div>
+      <div class="stats-grid" id="settleStats"></div>
+      <div class="card" style="margin-bottom:16px"><div class="card-body" style="display:flex;gap:14px;align-items:flex-end;flex-wrap:wrap">
+        <div class="field" style="margin:0"><label>开始日期</label><input class="input" type="date" id="statStart"></div>
+        <div class="field" style="margin:0"><label>结束日期</label><input class="input" type="date" id="statEnd"></div>
+        <div class="field" style="margin:0"><label>支付方式</label>
+          <select class="input" id="statPayMethod" style="width:130px">
+            <option value="">全部</option><option>CASH</option><option>WECHAT</option><option>ALIPAY</option><option>BANK_CARD</option><option>MEDICARE</option>
+          </select>
+        </div>
+        <button class="btn" onclick="queryRevenue()">查询营收</button>
+        <button class="btn ghost" onclick="dailySettlement()">一键日终结算（今日）</button>
+      </div></div>
+      <div class="card"><div class="table-wrap" id="revenuePanel"></div></div>
+    </section>
+
+    <!-- ========== 请假管理（医生） ========== -->
+    <section class="page" id="page-leave">
+      <div class="page-title"><svg class="icon"><use href="#i-plane"/></svg>请假管理</div>
+      <div class="book-flow">
+        <div class="card"><div class="card-head"><h3>发起请假</h3></div><div class="card-body">
+          <div class="field"><label>请假类型</label>
+            <select class="input" id="leaveType">
+              <option value="normal">常规请假（需提前 7 天，30 天内）</option>
+              <option value="emergency">紧急请假（未来 7 天内，将自动取消患者预约）</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <div class="field"><label>开始日期</label><input class="input" type="date" id="leaveStart"></div>
+            <div class="field"><label>结束日期</label><input class="input" type="date" id="leaveEnd"></div>
+          </div>
+          <div class="field"><label>时段</label>
+            <select class="input" id="leavePeriod"><option>全天</option><option>上午</option><option>下午</option></select>
+          </div>
+          <button class="btn block" onclick="applyLeave()">提交请假</button>
+        </div></div>
+      </div>
+      <div class="card" style="margin-top:16px"><div class="card-head"><h3>请假记录</h3></div><div class="table-wrap">
+        <table class="tbl"><thead><tr><th>类型</th><th>日期</th><th>时段</th><th>状态</th><th>操作</th></tr></thead><tbody id="leaveBody"></tbody></table>
+      </div></div>
+    </section>
+
+    <!-- ========== 消息中心 ========== -->
+    <section class="page" id="page-msg">
+      <div class="page-title"><svg class="icon"><use href="#i-bell"/></svg>消息中心</div>
+      <div class="card"><div class="table-wrap">
+        <table class="tbl"><thead><tr><th style="width:90px">类型</th><th>标题</th><th>内容</th><th style="width:160px">时间</th><th style="width:90px">状态</th></tr></thead>
+        <tbody id="msgBody"></tbody></table>
+      </div></div>
+    </section>
+
+    <!-- ========== AI 助手 ========== -->
+    <section class="page" id="page-ai">
+      <div class="ai-layout">
+        <div class="card ai-box">
+          <div class="card-head">
+            <h3 style="display:flex;align-items:center;gap:8px"><svg class="icon" style="color:var(--primary)"><use href="#i-robot"/></svg>医智助手</h3>
+            <button class="btn sm ghost ai-clear" onclick="clearAiHistory()">清空会话</button>
+          </div>
+          <div class="ai-msgs" id="aiMsgs"></div>
+          <div class="ai-input">
+            <textarea class="input" id="aiInput" placeholder="输入健康问题，例如：最近总是头晕，可能是什么原因？（Ctrl + Enter 发送）"></textarea>
+            <button class="btn" style="align-self:flex-end;height:44px;padding:0 20px" id="aiSend" onclick="sendAi()"><svg class="icon"><use href="#i-send"/></svg></button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
 </div>
 
-<div id="toast" class="toast"></div>
-<script src="script.js"></script>
+<!-- 弹窗 -->
+<div class="modal-mask" id="modalMask">
+  <div class="modal" id="modalBox">
+    <div class="modal-head"><h3 id="modalTitle">详情</h3><button class="close" onclick="closeModal()">×</button></div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-foot" id="modalFoot"></div>
+  </div>
+</div>
+<div id="toast-box"></div>
+
+<script src="js/portal.js"></script>
 </body>
 </html>

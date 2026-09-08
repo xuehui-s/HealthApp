@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Mapper.RefundOrderMapper">
+
+    <!-- 统计某日退款总金额（按退款时间筛选） -->
+    <select id="sumRefundByDate" resultType="java.math.BigDecimal">
+        SELECT COALESCE(SUM(refund_amount), 0)
+        FROM refund_order
+        WHERE DATE(refund_time) = #{date}
+          AND status = 1
+    </select>
+
+    <!-- 统计某日退款笔数（按退款时间筛选） -->
+    <select id="countRefundByDate" resultType="java.lang.Long">
+        SELECT COUNT(*)
+        FROM refund_order
+        WHERE DATE(refund_time) = #{date}
+          AND status = 1
+    </select>
+
+</mapper>

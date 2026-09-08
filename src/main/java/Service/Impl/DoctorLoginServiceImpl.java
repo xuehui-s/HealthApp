@@ -4,7 +4,7 @@ import Dto.Result;
 import Mapper.DoctorMapper;
 import PoJo.Doctor;
 import Service.DoctorLoginService;
-import Util.JwtUtil;
+import it.guowei.healthapp.common.util.JwtUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +21,15 @@ public class DoctorLoginServiceImpl implements DoctorLoginService {
 
     @Autowired
     private DoctorMapper doctorMapper;
-    
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
     private StringRedisTemplate redisTemplate;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     // ====================== 登录 ======================
     @Override
@@ -37,12 +40,6 @@ public class DoctorLoginServiceImpl implements DoctorLoginService {
 
         log.info("===== 医生登录 =====");
         log.info("账号：{}", username);
-
-        // ---------- 防刷：验证码发送冷却（1分钟） ----------
-        String sendCoolKey = "DOCTOR_SEND_CODE_COOL_" + username;
-        if (Boolean.TRUE.equals(redisTemplate.hasKey(sendCoolKey))) {
-            return Result.fail("验证码发送过于频繁，请1分钟后再试");
-        }
 
         // 1. 校验验证码（先不删！）
         String redisKey = "DOCTOR_LOGIN_CODE_" + username;
@@ -70,15 +67,21 @@ public class DoctorLoginServiceImpl implements DoctorLoginService {
         // ---------- 所有逻辑走完，最后再删验证码 ----------
         redisTemplate.delete(redisKey);
 
-        // 4. 生成JWT并存入Redis
-        String token = JwtUtil.generateToken(dbDoctor.getUsername());
-        
+        // 4. 生成JWT并存入Redis（企业版Token携带 doctorId/userType 声明）
+        String token = jwtUtil.generateToken(Long.valueOf(dbDoctor.getId()), dbDoctor.getUsername(), 2);
+
         // 将 Token 存入 Redis，设置30分钟滑动过期
         String jwtRedisKey = "JWT_TOKEN_" + dbDoctor.getUsername();
         redisTemplate.opsForValue().set(jwtRedisKey, token, 30, TimeUnit.MINUTES);
         log.info("医生登录成功，Token已存入Redis，用户: {}", dbDoctor.getUsername());
-        
-        return Result.ok(token);
+
+        // 返回 token 和用户信息（前端需要 doctorId 调用管理接口）
+        java.util.Map<String, Object> data = new java.util.HashMap<>();
+        data.put("token", token);
+        data.put("doctorId", dbDoctor.getId());
+        data.put("username", dbDoctor.getUsername());
+        data.put("name", dbDoctor.getName());
+        return Result.ok(data);
     }
 
     // ====================== 发送验证码（1分钟防刷） ======================

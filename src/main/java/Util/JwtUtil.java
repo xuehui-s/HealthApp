@@ -3,12 +3,15 @@ package Util;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
-@Component
+/**
+ * 旧版 JWT 静态工具（仅 subject=username）。
+ * 注意：不能加 @Component —— 与 it.guowei.healthapp.common.util.JwtUtil 的
+ * Bean 名 jwtUtil 冲突；本类所有方法均为静态方法，无需注册为 Bean。
+ */
 public class JwtUtil {
 
     // 密钥（32字节以上，符合HS256要求）

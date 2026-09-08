@@ -9,12 +9,14 @@ import Service.DepartmentService;
 import Vo.DoctorVO;
 import Dto.Result;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/appointment")
 @RequiredArgsConstructor
@@ -27,7 +29,18 @@ public class PatientAppointmentController {
     // 1. 获取所有科室
     @GetMapping("/dept/list")
     public Result deptList() {
-        return Result.ok(departmentService.list());
+        try {
+            List<PoJo.Department> list = departmentService.list();
+            if (list == null) {
+                log.warn("科室列表为null");
+                return Result.ok(new java.util.ArrayList<>());
+            }
+            log.info("返回科室列表，共{}个", list.size());
+            return Result.ok(list);
+        } catch (Exception e) {
+            log.error("获取科室列表失败", e);
+            return Result.fail("获取科室列表失败: " + e.getMessage());
+        }
     }
 
     // 2. 获取7天号源状态

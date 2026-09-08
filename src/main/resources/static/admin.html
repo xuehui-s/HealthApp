@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>运营管理控制台 · 智慧医疗</title>
+<link rel="stylesheet" href="css/admin.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2314273A'><rect width='24' height='24' rx='6'/><path d='M10.5 5h3v5.5H19v3h-5.5V19h-3v-5.5H5v-3h5.5z' fill='white'/></svg>">
+</head>
+<body>
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <symbol id="i-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-dash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.2 3.4-5 6.5-5s5.7 1.8 6.5 5M16 4.6a3.5 3.5 0 0 1 0 6.8M18.5 15.4c1.7.7 2.7 2 3 4.6"/></symbol>
+  <symbol id="i-doctor" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="3.5"/><path d="M5 20c.9-3.4 3.7-5.5 7-5.5s6.1 2.1 7 5.5"/><path d="M12 15v3M10.5 16.5h3"/></symbol>
+  <symbol id="i-dept" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16M16 9h3a1 1 0 0 1 1 1v11M4 21h17M8 7h4M8 11h4M8 15h4"/></symbol>
+  <symbol id="i-appt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18M9 15l2 2 4-4"/></symbol>
+  <symbol id="i-order" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="14" rx="2"/><path d="M3 10h18M16 15h2M7 15h4"/></symbol>
+  <symbol id="i-refund" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></symbol>
+  <symbol id="i-ai" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="16" height="11" rx="2.5"/><path d="M12 8V4M9 4h6M8.5 13h.01M15.5 13h.01"/></symbol>
+  <symbol id="i-log" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M5 4h13a1 1 0 0 1 1 1v15l-3-2-3 2-3-2-3 2V5a1 1 0 0 1 1-1z"/><path d="M9 9h6M9 13h4"/></symbol>
+  <symbol id="i-logout" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3M16 17l5-5-5-5M21 12H9"/></symbol>
+  <symbol id="i-empty" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M4 7h16M4 7v13h16V7M9 7V4h6v3M10 12h4"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></symbol>
+</svg>
+
+<!-- ==================== 登录 ==================== -->
+<div id="view-login">
+  <div class="login-card">
+    <div class="login-brand">
+      <span class="mark"><svg class="icon"><use href="#i-logo"/></svg></span>
+      <div><b>运营管理控制台</b><span>智慧医疗综合服务平台</span></div>
+    </div>
+    <form onsubmit="doLogin(event)">
+      <div class="field"><label>管理员账号</label>
+        <input class="input" id="loginUser" placeholder="请输入账号" autocomplete="username" required>
+      </div>
+      <div class="field"><label>密码</label>
+        <input class="input" type="password" id="loginPwd" placeholder="请输入密码" autocomplete="current-password" required>
+      </div>
+      <button class="btn block" type="submit" id="btnLogin">登 录</button>
+    </form>
+    <p class="login-hint">初始账号 admin / 123456（演示环境，登录后请尽快修改）</p>
+  </div>
+</div>
+
+<!-- ==================== 控制台 ==================== -->
+<div id="view-app">
+  <aside class="sidebar">
+    <div class="brand"><span class="mark"><svg class="icon"><use href="#i-logo"/></svg></span>
+      <div><b>智慧医疗</b><span>运营管理控制台</span></div>
+    </div>
+    <nav id="sideNav">
+      <a class="on" data-page="dashboard"><svg class="icon"><use href="#i-dash"/></svg>数据看板</a>
+      <a data-page="appointments"><svg class="icon"><use href="#i-appt"/></svg>预约管理</a>
+      <a data-page="orders"><svg class="icon"><use href="#i-order"/></svg>缴费订单</a>
+      <a data-page="refunds"><svg class="icon"><use href="#i-refund"/></svg>退款审核<span class="dot" id="refundDot"></span></a>
+      <a data-page="departments"><svg class="icon"><use href="#i-dept"/></svg>科室管理</a>
+      <a data-page="doctors"><svg class="icon"><use href="#i-doctor"/></svg>医生管理</a>
+      <a data-page="patients"><svg class="icon"><use href="#i-users"/></svg>患者管理</a>
+      <a data-page="aichat"><svg class="icon"><use href="#i-ai"/></svg>AI 对话记录</a>
+      <a data-page="logs"><svg class="icon"><use href="#i-log"/></svg>操作日志</a>
+    </nav>
+    <div class="side-foot">
+      <div class="me"><b id="meName">-</b><span id="meRole">管理员</span></div>
+      <button onclick="doLogout()" title="退出登录"><svg class="icon"><use href="#i-logout"/></svg></button>
+    </div>
+  </aside>
+
+  <div class="content">
+    <!-- ========== 数据看板 ========== -->
+    <section class="page on" id="page-dashboard">
+      <div class="page-head"><h2>数据看板</h2><span class="sub" id="dashDate"></span></div>
+      <div class="stats-grid" id="dashCards"></div>
+      <div class="grid-2">
+        <div class="card"><div class="card-head"><h3>近 7 日预约趋势</h3></div><div class="chart" id="chartAppt"></div></div>
+        <div class="card"><div class="card-head"><h3>近 7 日营收趋势（元）</h3></div><div class="chart" id="chartRevenue"></div></div>
+      </div>
+      <div class="grid-2">
+        <div class="card"><div class="card-head"><h3>科室预约排行</h3></div><div class="chart" id="chartDept"></div></div>
+        <div class="card"><div class="card-head"><h3>医生工作量 TOP10</h3></div><div class="table-wrap" id="workloadBox"></div></div>
+      </div>
+      <div class="card"><div class="card-head"><h3>支付方式分布</h3></div><div class="chart" id="chartPay"></div></div>
+    </section>
+
+    <!-- ========== 预约管理 ========== -->
+    <section class="page" id="page-appointments">
+      <div class="page-head"><h2>预约管理</h2></div>
+      <div class="card">
+        <div class="filter-bar">
+          <select class="input" id="apptStatus" style="width:140px">
+            <option value="">全部状态</option>
+            <option value="0">待就诊</option><option value="1">已签到</option><option value="2">待缴费</option>
+            <option value="3">已缴费</option><option value="4">已取消</option><option value="5">医生取消</option><option value="6">超时终止</option>
+          </select>
+          <input class="input" type="date" id="apptDate" style="width:150px">
+          <select class="input" id="apptDept" style="width:150px"><option value="">全部科室</option></select>
+          <button class="btn" onclick="loadAppointments(1)">查询</button>
+        </div>
+        <div class="table-wrap" id="apptTable"></div>
+      </div>
+    </section>
+
+    <!-- ========== 缴费订单 ========== -->
+    <section class="page" id="page-orders">
+      <div class="page-head"><h2>缴费订单</h2></div>
+      <div class="card">
+        <div class="filter-bar">
+          <select class="input" id="orderStatus" style="width:140px">
+            <option value="">全部状态</option>
+            <option value="0">待缴费</option><option value="1">已缴费</option><option value="2">已作废</option>
+            <option value="3">超时作废</option><option value="4">已退款</option><option value="5">部分退款</option>
+          </select>
+          <input class="input" id="orderNo" placeholder="订单号关键字" style="width:200px">
+          <button class="btn" onclick="loadOrders(1)">查询</button>
+        </div>
+        <div class="table-wrap" id="orderTable"></div>
+      </div>
+    </section>
+
+    <!-- ========== 退款审核 ========== -->
+    <section class="page" id="page-refunds">
+      <div class="page-head"><h2>退款审核</h2></div>
+      <div class="card">
+        <div class="filter-bar">
+          <select class="input" id="refundStatus" style="width:140px">
+            <option value="0">待审核</option><option value="1">已退款</option><option value="2">已拒绝</option><option value="">全部</option>
+          </select>
+          <button class="btn" onclick="loadRefunds(1)">查询</button>
+        </div>
+        <div class="table-wrap" id="refundTable"></div>
+      </div>
+    </section>
+
+    <!-- ========== 科室管理 ========== -->
+    <section class="page" id="page-departments">
+      <div class="page-head"><h2>科室管理</h2>
+        <button class="btn" onclick="openDeptModal()">+ 新增科室</button></div>
+      <div class="card"><div class="table-wrap" id="deptTable"></div></div>
+    </section>
+
+    <!-- ========== 医生管理 ========== -->
+    <section class="page" id="page-doctors">
+      <div class="page-head"><h2>医生管理</h2></div>
+      <div class="card">
+        <div class="filter-bar">
+          <select class="input" id="docDept" style="width:160px"><option value="">全部科室</option></select>
+          <input class="input" id="docKeyword" placeholder="姓名 / 工号 / 手机号" style="width:190px">
+          <button class="btn" onclick="loadDoctors(1)">查询</button>
+        </div>
+        <div class="table-wrap" id="docTable"></div>
+      </div>
+    </section>
+
+    <!-- ========== 患者管理 ========== -->
+    <section class="page" id="page-patients">
+      <div class="page-head"><h2>患者管理</h2></div>
+      <div class="card">
+        <div class="filter-bar">
+          <input class="input" id="patKeyword" placeholder="姓名 / 手机号" style="width:200px">
+          <button class="btn" onclick="loadPatients(1)">查询</button>
+        </div>
+        <div class="table-wrap" id="patTable"></div>
+      </div>
+    </section>
+
+    <!-- ========== AI 对话记录 ========== -->
+    <section class="page" id="page-aichat">
+      <div class="page-head"><h2>AI 对话记录</h2></div>
+      <div class="card">
+        <div class="filter-bar">
+          <input class="input" id="aiSession" placeholder="会话 ID" style="width:230px">
+          <select class="input" id="aiRole" style="width:120px">
+            <option value="">全部角色</option><option value="user">用户提问</option><option value="assistant">AI 回答</option>
+          </select>
+          <button class="btn" onclick="loadAiChats(1)">查询</button>
+        </div>
+        <div class="table-wrap" id="aiTable"></div>
+      </div>
+    </section>
+
+    <!-- ========== 操作日志 ========== -->
+    <section class="page" id="page-logs">
+      <div class="page-head"><h2>操作日志</h2></div>
+      <div class="card">
+        <div class="filter-bar">
+          <input class="input" id="logUser" placeholder="操作人" style="width:160px">
+          <button class="btn" onclick="loadLogs(1)">查询</button>
+        </div>
+        <div class="table-wrap" id="logTable"></div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="modal-mask" id="modalMask">
+  <div class="modal" id="modalBox">
+    <div class="modal-head"><h3 id="modalTitle">详情</h3><button class="close" onclick="closeModal()">×</button></div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-foot" id="modalFoot"></div>
+  </div>
+</div>
+<div id="toast-box"></div>
+
+<script src="js/admin.js"></script>
+</body>
+</html>

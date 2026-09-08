@@ -3,9 +3,11 @@ package Job;
 import Event.MessageEvent;
 import Mapper.MessageMapper;
 import PoJo.SysMessage;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import constant.RedisKey;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -17,12 +19,21 @@ import java.util.List;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class MessageConsumeJob {
 
     private final StringRedisTemplate redisTemplate;
     private final MessageMapper messageMapper;
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
+
+    public MessageConsumeJob(StringRedisTemplate redisTemplate, MessageMapper messageMapper) {
+        this.redisTemplate = redisTemplate;
+        this.messageMapper = messageMapper;
+        this.objectMapper = new ObjectMapper()
+                // 忽略未知属性（兼容历史数据中可能存在的 @class 元数据）
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                // 允许直接访问字段（MessageEvent 使用 public 字段而非 getter/setter）
+                .setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+    }
 
     // ====================== 定时消费 Redis 队列中的消息 ======================
     @Scheduled(fixedRate = 1000)

@@ -1,6 +1,7 @@
 package Service.Impl;
 
 import Dto.AppointmentDTO;
+import Dto.Result;
 import Event.MessageEvent;
 import Mapper.AppointmentMapper;
 import Mapper.DoctorMapper;
@@ -12,7 +13,7 @@ import Service.AppointmentService;
 import Service.DoctorLeaveService;
 import Vo.DayStatusVO;
 import Vo.PeriodStatusVO;
-import Dto.Result;
+import constant.AppointmentStatus;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -254,7 +255,7 @@ public class AppointmentServiceImpl extends ServiceImpl<AppointmentMapper, Appoi
             PatientLimit limit = patientLimitMapper.selectOne(wrapper);
 
             if (limit == null) {
-                appointment.setStatus(2);
+                appointment.setStatus(AppointmentStatus.PATIENT_CANCEL);
                 appointmentMapper.updateById(appointment);
                 // ====================== 发送取消预约通知 ======================
                 applicationContext.publishEvent(new MessageEvent(
@@ -284,7 +285,7 @@ public class AppointmentServiceImpl extends ServiceImpl<AppointmentMapper, Appoi
                 return Result.fail("今日取消次数已达上限（3次）");
             }
 
-            appointment.setStatus(2);
+            appointment.setStatus(AppointmentStatus.PATIENT_CANCEL);
             appointmentMapper.updateById(appointment);
 
             if (limit.getAppointCount() > 0) {
